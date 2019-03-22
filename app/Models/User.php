@@ -21,6 +21,8 @@ class User extends Authenticatable implements MustVerifyEmailContract
 
     use Traits\ActiveUserHelper;
 
+    use Traits\LastActivedAtHelper;
+
     public function notify($instance)
     {
         // 如果要通知的人是当前用户，就不必通知了！
