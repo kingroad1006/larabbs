@@ -1,20 +1,13 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Api;
 
-class ReplyRequest extends Request
+class ReplyRequest extends FormRequest
 {
     public function rules()
     {
         return [
             'content' => 'required|min:2',
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            // Validation messages
         ];
     }
 }
