@@ -6,6 +6,7 @@ use App\Models\Topic;
 use App\Models\Reply;
 use App\Http\Requests\Api\ReplyRequest;
 use App\Transformers\ReplyTransformer;
+use App\Models\User;
 
 class RepliesController extends Controller
 {
@@ -18,5 +19,31 @@ class RepliesController extends Controller
 
         return $this->response->item($reply, new ReplyTransformer())
             ->setStatusCode(201);
+    }
+
+    public function destroy(Topic $topic, Reply $reply)
+    {
+        if ($reply->topic_id != $topic->id) {
+            return $this->response->errorBadRequest();
+        }
+
+        $this->authorize('destroy', $reply);
+        $reply->delete();
+
+        return $this->response->noContent();
+    }
+
+    public function index(Topic $topic)
+    {
+        $replies = $topic->replies()->paginate(20);
+
+        return $this->response->paginator($replies, new ReplyTransformer());
+    }
+
+    public function userIndex(User $user)
+    {
+        $replies = $user->replies()->paginate(20);
+
+        return $this->response->paginator($replies, new ReplyTransformer());
     }
 }
